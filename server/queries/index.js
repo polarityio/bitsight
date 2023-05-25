@@ -1,5 +1,5 @@
-const getAlerts = require('./getAlerts');
+const getCompanies = require('./getCompanies');
 
 module.exports = {
-  getAlerts
+  getCompanies
 };

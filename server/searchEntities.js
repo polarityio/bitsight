@@ -1,9 +1,9 @@
-const {} = require('./queries');
+const { getCompanies } = require('./queries');
 
 const searchEntities = async (entities, options) => {
-  const [] = await Promise.all([]);
+  const companies = await getCompanies(entities, options);
 
-  return {};
+  return { companies };
 };
 
 module.exports = searchEntities;

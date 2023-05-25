@@ -1,12 +1,10 @@
 const { flow, get, size, find, eq, map, some } = require('lodash/fp');
 
-const assembleLookupResults = (entities, alerts, incidents, kustoQueryResults, options) =>
+const assembleLookupResults = (entities, companies, options) =>
   map((entity) => {
     const resultsForThisEntity = getResultsForThisEntity(
       entity,
-      alerts,
-      incidents,
-      kustoQueryResults,
+      companies,
       options
     );
 
@@ -30,16 +28,16 @@ const getResultForThisEntity = (entity, results) =>
 
 const getResultsForThisEntity = (
   entity,
-  //todo
-  options
+  companies
 ) => {
   return {
-    // todo
+    companies: getResultForThisEntity(entity, companies)
   };
 };
 
-const createSummaryTags = ({}, options) => {
-  return [].concat([]).concat();
+const createSummaryTags = ({companies}, options) => {
+  // TODO
+  return [].concat([]);
 };
 
 module.exports = assembleLookupResults;
