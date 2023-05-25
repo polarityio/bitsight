@@ -1,0 +1,32 @@
+{
+  "name": "BitSight",
+  "acronym": "BS",
+  "description": "Search BitSight for Companies and their Security Ratings",
+  "entityTypes": ["domain"],
+  "defaultColor": "light-blue",
+  "styles": ["./client/styles.less"],
+  "block": {
+    "component": { "file": "./client/block.js" },
+    "template": { "file": "./client/block.hbs" }
+  },
+  "request": {
+    "cert": "",
+    "key": "",
+    "passphrase": "",
+    "ca": "",
+    "proxy": "",
+    "rejectUnauthorized": true
+  },
+  "logging": { "level": "info" },
+  "options": [
+    {
+      "key": "apiKey",
+      "name": "Company API Key",
+      "description": "A Company API Key associated with your BitSight Instance",
+      "default": "",
+      "type": "password",
+      "userCanEdit": false,
+      "adminOnly": true
+    }
+  ]
+}

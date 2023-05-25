@@ -2,12 +2,18 @@
 
 Bitsight is a cyber risk management leader transforming how companies manage exposure, performance, and risk for themselves and their third parties.
 
-Enterprises of all sizes and industries turn to Bitsight to expand distributed ecosystems without worrying about expanded attack surfaces. To accelerate transformation without accelerating financial woes. To add vendors without adding their vulnerabilities. And to get everyone talking the same language about risk.
+The Polarity BitSight integration allows searching BitSight for Companies by Domains, along with those companies Security Ratings!
+
 
 To learn more about BitSight, visit the [official website](https://www.bitsight.com/about/about-us).
 
+
 ## BitSight Integration Options
-TODO
+
+### Company API Key
+A Company API Key associated with your BitSight Instance
+
+
 ## Installation Instructions
 
 Installation instructions for integrations are provided on the [PolarityIO GitHub Page](https://polarityio.github.io/).

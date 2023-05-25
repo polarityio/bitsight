@@ -1,7 +1,7 @@
 module.exports = {
   name: 'BitSight',
   acronym: 'BS',
-  description: 'TODO',
+  description: 'Search BitSight for Companies and their Security Ratings',
   entityTypes: ['domain'],
   defaultColor: 'light-blue',
   styles: ['./client/styles.less'],
