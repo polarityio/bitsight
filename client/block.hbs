@@ -1,0 +1,215 @@
+<div class="p-link">
+  <a href="https://service.bitsighttech.com/app/spm/companies/search/?term={{block.entity.value}}">
+    Search in BitSight {{fa-icon icon="external-link-square" class="external-link-icon"}}
+  </a>
+</div>
+{{#each details.companies as |company index|}}
+  <div class={{unless (eq index 0) "mt-3"}}>
+    <h1 class="p-title">
+      {{fa-icon icon="building" class="company-icon" fixedWidth=true}}
+      {{company.name}}
+    </h1>
+    <div class="company-fields">
+      <div class="p-block">{{company.description}}</div>
+      {{#if company.details.is_service_provider}}
+        <div
+          class="service-tag"
+          title="Service providers’ IP addresses may be used to host customers’ infrastructure; Some events seen on provider networks may be due to customer activity."
+        >
+          <div class="content">Service Provider</div>
+        </div>
+      {{/if}}
+      {{#if company.details.in_portfolio}}
+        <div class="p-link">
+          <a href="https://service.bitsighttech.com/app/spm/company/{{company.guid}}/overview">
+            View Company Details
+            {{fa-icon icon="external-link-square" class="external-link-icon"}}
+          </a>
+        </div>
+      {{/if}}
+      {{#if company.details.has_company_tree}}
+        <div class="p-link">
+          <a href="https://service.bitsighttech.com/app/spm/ratings-tree?guid={{company.guid}}">
+            View Ratings Tree {{fa-icon icon="external-link-square" class="external-link-icon"}}
+          </a>
+        </div>
+      {{/if}}
+      <div>
+        <span class="p-key">Domain: </span>
+        <span class="p-value">{{company.primary_domain}}</span>
+      </div>
+      <div>
+        <span class="p-key">Website: </span>
+        <span class="p-value">{{company.website}}</span>
+      </div>
+      <div>
+        <span class="p-key">Industry: </span>
+        <span class="p-value">{{company.industry}}</span>
+      </div>
+      <div>
+        <span class="p-key">Monitored: </span>
+        <span class="p-value">{{company.details.customer_monitoring_count}}</span>
+      </div>
+      <div>
+        <span class="p-key">Searched by Users: </span>
+        <span class="p-value">{{company.details.search_history_count}}</span>
+      </div>
+      {{#if (get expandableTitleStates index)}}
+        <a
+          href="#"
+          class="expandable-title"
+          {{on "click" (action "toggleExpandableTitle" index company.guid)}}
+        >
+          <span class="text">Security Ratings</span>
+          {{fa-icon icon="angle-up"}}
+        </a>
+        {{#if (get getCompanyInsightsIsRunning index)}}
+          <div class="loading-indicator">
+            {{fa-icon icon="spinner-third" fixedWidth=true spin=true}}
+          </div>
+        {{else if (get getCompanyInsightsErrorMessage index)}}
+          <div class="alert alert-danger error-container">
+            <div class="error-title">
+              {{fa-icon "exclamation-circle"}}
+              Error Loading Details
+            </div>
+            <div class="error-message">
+              {{get
+                getCompanyInsightsErrorMessage
+                index
+              }}
+            </div>
+          </div>
+        {{else if (get companyInsightsStates index)}}
+          {{#if
+            (eq
+              (get companyInsightsStates index) "You don't have access to this resource"
+            )
+          }}
+            <div class="no-access-message">
+              <div class="no-access-to-company">
+                You don't have access to the Security Ratings for {{company.name}}.
+              </div>
+              <div class="click-request-company">Click <span class="request-company-text">Request company</span> at the bottom
+                of
+                <a
+                  href="https://service.bitsighttech.com/app/spm/companies/search/?term={{block.entity.value}}"
+                >
+                  this Page
+                </a>
+              </div>
+              <div class="click-view-request-statuses">or you can
+                <a
+                  href="https://service.bitsighttech.com/app/spm/companies/search/?term={{block.entity.value}}"
+                >
+                  View Request Statuses
+                </a>
+                if you've already requested access
+              </div>
+            </div>
+          {{else}}
+            <div class="security-ratings">
+              <div class="highest-lowest-ratings">
+                {{#with (get lowestRatingInsightsStates index) as |lowestRating|}}
+                  {{#if lowestRating}}
+                    <div class="highest-lowest-rating">
+                      <div
+                        class="score{{if (gte lowestRating.score 740) ' blue'}}{{if
+                            (and
+                              (gte lowestRating.score 640) (lte lowestRating.score 739)
+                            )
+                            ' yellow'
+                          }}{{if (lte lowestRating.score 639) ' red'}}"
+                      >
+                        {{lowestRating.score}}
+                      </div>
+                      <div class="date">Lowest on {{lowestRating.date}}</div>
+                    </div>
+                  {{/if}}
+                {{/with}}
+                {{#with (get highestRatingInsightsStates index) as |highestRating|}}
+                  {{#if highestRating}}
+                    <div class="highest-lowest-rating">
+                      <div
+                        class="score{{if (gte highestRating.score 740) ' blue'}}{{if
+                            (and
+                              (gte highestRating.score 640)
+                              (lte highestRating.score 739)
+                            )
+                            ' yellow'
+                          }}{{if (lte highestRating.score 639) ' red'}}"
+                      >
+                        {{highestRating.score}}
+                      </div>
+                      <div class="date">Highest on {{highestRating.date}}</div>
+                    </div>
+                  {{/if}}
+                {{/with}}
+              </div>
+              <h1 class="p-title">
+                Highlights
+              </h1>
+              {{#each (get companyInsightsStates index) as |companyInsight|}}
+                <div class="security-rating">
+                  <div class="effective-date-container">
+                    <span class="effective-date">Effective Date:</span>
+                    <span class="date">
+                      {{moment-format
+                        companyInsight.date
+                        "DD MMM YYYY"
+                        timeZone=timezone
+                      }}
+                    </span>
+                  </div>
+                  <div class="changes-container">
+                    <div class="point-change-container">
+                      <span class="point-change">{{companyInsight.scoreChange}}
+                        point
+                        {{companyInsight.scoreChangeType}}
+                      </span>
+                      <span class="point-shift">({{companyInsight.start_score}}
+                        {{#if (eq companyInsight.scoreChangeType "rise")}}
+                          {{fa-icon
+                            icon="level-up"
+                            class="score-change-icon up"
+                            fixedWidth=true
+                          }}
+                        {{else}}
+                          {{fa-icon
+                            icon="level-down"
+                            class="score-change-icon down"
+                            fixedWidth=true
+                          }}
+                        {{/if}}
+                        {{companyInsight.end_score}})
+                      </span>
+                    </div>
+                    <div>
+                      <span class="p-key">
+                        {{titleize
+                          (humanize (dasherize companyInsight.reasons.0.risk_vector))
+                        }}: grade change from
+                        {{companyInsight.reasons.0.evidence.0.start_grade}}
+                        to
+                        {{companyInsight.reasons.0.evidence.0.end_grade}}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              {{/each}}
+            </div>
+          {{/if}}
+        {{/if}}
+      {{else}}
+        <a
+          href="#"
+          class="expandable-title"
+          {{on "click" (action "toggleExpandableTitle" index company.guid)}}
+        >
+          <span class="text">Security Ratings</span>
+          {{fa-icon icon="angle-down"}}
+        </a>
+      {{/if}}
+    </div>
+  </div>
+{{/each}}

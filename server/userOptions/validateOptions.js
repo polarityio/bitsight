@@ -1,14 +1,12 @@
-const { size, flow, compact, map, get, flatten } = require('lodash/fp');
+const { size, flow } = require('lodash/fp');
 const { parseErrorToReadableJson } = require('../dataTransformations');
 const { getLogger } = require('../logging');
-const { getIncidents } = require('../queries');
 const { requestWithDefaults } = require('../request');
-const parseUserOptions = require('./parseUserOptions');
 const { validateStringOptions, flattenOptions } = require('./utils');
 
 const validateOptions = async (options, callback) => {
   const stringOptionsErrorMessages = {
-    //todo
+    apiKey: '* Required'
   };
 
   const stringValidationErrors = validateStringOptions(
@@ -16,24 +14,22 @@ const validateOptions = async (options, callback) => {
     options
   );
 
-  const parsedOptions = flow(flattenOptions, parseUserOptions)(options);
-
   const authenticationError = !size(stringValidationErrors)
-    ? await validateAuthentication(parsedOptions)
+    ? await validateAuthentication(options)
     : [];
 
-  let errors = stringValidationErrors.concat(authenticationError);
+  const errors = stringValidationErrors.concat(authenticationError);
 
-  callback(null, errors.concat(filterOptionErrors).concat(lookbackDaysError));
+  callback(null, errors);
 };
 
-const validateAuthentication = async (options) => {
+const validateAuthentication = async (unParsedOptions) => {
+  const options = flattenOptions(unParsedOptions);
+
   try {
     await requestWithDefaults({
-      //todo
-      method: 'GET',
-      route: 'incidents',
-      qs: { $top: 10 },
+      route: 'companies/search',
+      qs: { domain: 'google.com', limit: 1 },
       options
     });
     return [];
@@ -42,41 +38,9 @@ const validateAuthentication = async (options) => {
       { error, formattedError: parseErrorToReadableJson(error) },
       'Authentication Failed'
     );
-    const message = `Authentication Failed: ${error.message}`;
-    return [
-      { key: 'clientId', message },
-      { key: 'tenantId', message },
-      { key: 'clientSecret', message }
-    ];
+    const message = `Authentication Failed: ${error.message} - Confirm your Company API Key is correct.`;
+    return { key: 'apiKey', message };
   }
 };
-
-const validateFilterOption = async (filterOptionKey, parsedFilterOptionKey, options) =>
-  compact(
-    await Promise.all(
-      map(async (filterOptionValue) => {
-        try {
-          await getIncidents([{ isEmail: true, value: 'test@polarity.io' }], {
-            ...options,
-            parsedIgnoreClassifications: [],
-            parsedIgnoreDeterminations: [],
-            parsedIgnoreSeverities: [],
-            parsedIgnoreStatuses: [],
-            parsedIgnoreServiceSources: [],
-            [parsedFilterOptionKey]: [filterOptionValue]
-          });
-        } catch (error) {
-          getLogger().error(
-            { error, formattedError: parseErrorToReadableJson(error) },
-            `Filter option ${filterOptionKey} is not a valid possibility`
-          );
-          return {
-            key: filterOptionKey,
-            message: `* \`${filterOptionValue}\` is not a valid possible value for this Ignore Option`
-          };
-        }
-      }, get(parsedFilterOptionKey, options))
-    )
-  );
 
 module.exports = validateOptions;

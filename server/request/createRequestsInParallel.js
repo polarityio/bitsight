@@ -6,8 +6,7 @@ const createRequestsInParallel =
   async (
     requestsOptions,
     responseGetPath,
-    limit = 10,
-    onlyReturnPopulatedResults = true
+    limit = 10
   ) => {
     const unexecutedRequestFunctions = map(
       ({ entity, ...requestOptions }) =>
@@ -21,12 +20,7 @@ const createRequestsInParallel =
 
     const results = await parallelLimit(unexecutedRequestFunctions, limit);
 
-    return onlyReturnPopulatedResults
-      ? filter(
-          flow((result) => getOr(result, 'result', result), negate(isEmpty)),
-          results
-        )
-      : results;
+    return results;
   };
 
 module.exports = createRequestsInParallel;

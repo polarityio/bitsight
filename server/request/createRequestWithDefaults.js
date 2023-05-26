@@ -1,14 +1,14 @@
 const fs = require('fs');
 
 const request = require('postman-request');
-const { get, isEmpty, getOr } = require('lodash/fp');
+const { get, isEmpty, getOr, identity } = require('lodash/fp');
 const Bottleneck = require('bottleneck/es5');
 
-const { ERROR_MESSAGES } = require('../constants');
-const authenticateRequest = require('./authenticateRequest');
 const { getLogger } = require('../logging');
 const { parseErrorToReadableJson } = require('../dataTransformations');
 
+const authenticateRequest = require('./authenticateRequest');
+const handleInsightsRequest403 = require('./handleInsightsRequest403');
 
 const _configFieldIsValid = (field) => typeof field === 'string' && field.length > 0;
 
@@ -40,7 +40,7 @@ const createRequestWithDefaults = () => {
   const requestWithDefaultsBuilder = (
     preRequestFunction = async () => ({}),
     postRequestSuccessFunction = async (x) => x,
-    postRequestFailureFunction = async (e) => {
+    postRequestFailureFunction = async (e, ro) => {
       throw e;
     }
   ) => {
@@ -78,16 +78,21 @@ const createRequestWithDefaults = () => {
             error,
             _requestOptions
           );
-        } catch (_error) {
-          const err = parseErrorToReadableJson(_error);
-          _error.maxRequestQueueLimitHit =
+        } catch (error) {
+          const err = parseErrorToReadableJson(error);
+
+          if (_requestOptions.entity)
+            error.entity = JSON.stringify(_requestOptions.entity);
+
+          error.maxRequestQueueLimitHit =
             (isEmpty(err) && isEmpty(result)) ||
             (err && err.message === 'This job has been dropped by Bottleneck');
 
-          _error.isConnectionReset =
+          error.isConnectionReset =
             getOr('', 'errors[0].meta.err.code', err) === 'ECONNRESET';
-          _error.entity = JSON.stringify(_requestOptions.entity);
-          throw _error;
+          error.entity = JSON.stringify(_requestOptions.entity);
+
+          throw error;
         }
       }
       return postRequestFunctionResults;
@@ -111,8 +116,7 @@ const createRequestWithDefaults = () => {
     });
 
     const roundedStatus = Math.round(statusCode / 100) * 100;
-    const statusCodeNotSuccessful =
-      ![200].includes(roundedStatus);
+    const statusCodeNotSuccessful = ![200].includes(roundedStatus);
     const responseBodyError = get('error', body);
 
     if (statusCodeNotSuccessful || responseBodyError) {
@@ -126,14 +130,18 @@ const createRequestWithDefaults = () => {
       requestError.status = statusCodeNotSuccessful
         ? statusCode
         : get('code', responseBodyError);
-      requestError.detail = get(get('error', body), ERROR_MESSAGES);
+      requestError.detail = get('error', body);
       requestError.description = JSON.stringify(body);
       requestError.requestOptions = JSON.stringify(requestOptionsWithoutSensitiveData);
       throw requestError;
     }
   };
 
-  const requestDefaultsWithInterceptors = requestWithDefaultsBuilder(authenticateRequest);
+  const requestDefaultsWithInterceptors = requestWithDefaultsBuilder(
+    authenticateRequest,
+    identity,
+    handleInsightsRequest403
+  );
 
   return requestDefaultsWithInterceptors;
 };
