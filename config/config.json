@@ -1,14 +1,22 @@
 {
   "polarityIntegrationUuid": "e89fc8c0-fb4e-11ed-b9bb-951b669a09c1",
-  "name": "BitSight",
+  "name": "Bitsight",
   "acronym": "BS",
-  "description": "Search BitSight for Companies and their Security Ratings",
-  "entityTypes": ["domain"],
+  "description": "Search Bitsight for Companies and their Security Ratings",
+  "entityTypes": [
+    "domain"
+  ],
   "defaultColor": "light-blue",
-  "styles": ["./client/styles.less"],
+  "styles": [
+    "./client/styles.less"
+  ],
   "block": {
-    "component": { "file": "./client/block.js" },
-    "template": { "file": "./client/block.hbs" }
+    "component": {
+      "file": "./client/block.js"
+    },
+    "template": {
+      "file": "./client/block.hbs"
+    }
   },
   "request": {
     "cert": "",
@@ -18,12 +26,14 @@
     "proxy": "",
     "rejectUnauthorized": true
   },
-  "logging": { "level": "info" },
+  "logging": {
+    "level": "info"
+  },
   "options": [
     {
       "key": "apiKey",
       "name": "Company API Key",
-      "description": "A Company API Key associated with your BitSight Instance",
+      "description": "A Company API Key associated with your Bitsight Instance",
       "default": "",
       "type": "password",
       "userCanEdit": false,
