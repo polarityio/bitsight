@@ -38,7 +38,7 @@ const validateAuthentication = async (unParsedOptions) => {
       { error, formattedError: parseErrorToReadableJson(error) },
       'Authentication Failed'
     );
-    const message = `Authentication Failed: ${error.message}`;
+    const message = `Authentication Failed: ${error.message} - Confirm your Company API Key is correct.`;
     return { key: 'apiKey', message };
   }
 };
