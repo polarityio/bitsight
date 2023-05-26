@@ -1,17 +1,17 @@
-# Polarity BitSight Integration
+# Polarity Bitsight Integration
 
 Bitsight is a cyber risk management leader transforming how companies manage exposure, performance, and risk for themselves and their third parties.
 
-The Polarity BitSight integration allows searching BitSight for Companies by Domains, along with those companies Security Ratings!
+The Polarity Bitsight integration allows searching Bitsight for Companies by domain and includes the companies' Security Ratings.
 
+To learn more about Bitsight, visit the [official website](https://www.bitsight.com/about/about-us).
 
-To learn more about BitSight, visit the [official website](https://www.bitsight.com/about/about-us).
+<img src="images/overlay.png" width="50%">
 
-
-## BitSight Integration Options
+## Bitsight Integration Options
 
 ### Company API Key
-A Company API Key associated with your BitSight Instance
+A Company API Key associated with your Bitsight Instance
 
 
 ## Installation Instructions
