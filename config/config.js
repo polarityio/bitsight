@@ -1,7 +1,7 @@
 module.exports = {
-  name: 'BitSight',
+  name: 'Bitsight',
   acronym: 'BS',
-  description: 'Search BitSight for Companies and their Security Ratings',
+  description: 'Search Bitsight for Companies and their Security Ratings',
   entityTypes: ['domain'],
   defaultColor: 'light-blue',
   styles: ['./client/styles.less'],
@@ -28,7 +28,7 @@ module.exports = {
     {
       key: 'apiKey',
       name: 'Company API Key',
-      description: 'A Company API Key associated with your BitSight Instance',
+      description: 'A Company API Key associated with your Bitsight Instance',
       default: '',
       type: 'password',
       userCanEdit: false,
