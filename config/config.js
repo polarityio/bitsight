@@ -1,7 +1,7 @@
 module.exports = {
-  name: 'BitSight',
+  name: 'Bitsight',
   acronym: 'BS',
-  description: 'TODO',
+  description: 'Search Bitsight for Companies and their Security Ratings',
   entityTypes: ['domain'],
   defaultColor: 'light-blue',
   styles: ['./client/styles.less'],
@@ -26,12 +26,11 @@ module.exports = {
   },
   options: [
     {
-      key: 'clientId',
-      name: 'Azure AD Registered App Client/Application ID',
-      description:
-        "TODO",
+      key: 'apiKey',
+      name: 'Company API Key',
+      description: 'A Company API Key associated with your Bitsight Instance',
       default: '',
-      type: 'text',
+      type: 'password',
       userCanEdit: false,
       adminOnly: true
     }

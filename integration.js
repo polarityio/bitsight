@@ -1,5 +1,5 @@
 'use strict';
-const { validateOptions, parseUserOptions } = require('./server/userOptions');
+const { validateOptions } = require('./server/userOptions');
 const { setLogger, getLogger } = require('./server/logging');
 
 const {
@@ -10,28 +10,20 @@ const {
 
 const searchEntities = require('./server/searchEntities');
 const assembleLookupResults = require('./server/assembleLookupResults');
+const onMessageFunctions = require('./server/onMessage');
 
-const doLookup = async (entities, userOptions, cb) => {
+const doLookup = async (entities, options, cb) => {
   const Logger = getLogger();
   try {
     Logger.debug({ entities }, 'Entities');
 
     const { searchableEntities, nonSearchableEntities } = organizeEntities(entities);
 
-    const options = parseUserOptions(userOptions);
+    const { companies } = await searchEntities(searchableEntities, options);
 
-    const { } = await searchEntities(
-      searchableEntities,
-      options
-    );
+    Logger.trace({ companies });
 
-    Logger.trace({  });
-
-    const lookupResults = assembleLookupResults(
-      entities,
-//TODO
-      options
-    );
+    const lookupResults = assembleLookupResults(entities, companies, options);
 
     const ignoreResults = buildIgnoreResults(nonSearchableEntities);
 
@@ -45,8 +37,12 @@ const doLookup = async (entities, userOptions, cb) => {
   }
 };
 
+const onMessage = ({ action, data: actionParams }, options, callback) =>
+  onMessageFunctions[action](actionParams, options, callback);
+
 module.exports = {
   startup: setLogger,
   validateOptions,
-  doLookup
+  doLookup,
+  onMessage
 };

@@ -1,9 +1,9 @@
 const authenticateRequest = async ({ route, options, ...requestOptions }) => ({
-    ...requestOptions,
-    url: `${options.url}/${route}`,
-    auth: {
-      username: options.apiKey
-    }
-  })
+  ...requestOptions,
+  url: 'https://api.bitsighttech.com/v1/' + route,
+  auth: {
+    username: options.apiKey
+  }
+});
 
 module.exports = authenticateRequest;
