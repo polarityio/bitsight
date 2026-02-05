@@ -1,0 +1,58 @@
+{
+  "companies": [
+    {
+      "guid": "a940bb61-33c4-42c9-9231-c8194c305db3",
+      "name": "Example Corporation",
+      "description": "Example Corporation is a technology company providing cloud infrastructure and cybersecurity solutions to enterprise customers worldwide.",
+      "website": "https://www.example.com",
+      "primary_domain": "example.com",
+      "industry": "Technology",
+      "details": {
+        "is_service_provider": false,
+        "in_portfolio": true,
+        "has_company_tree": true,
+        "customer_monitoring_count": 15,
+        "search_history_count": 247,
+        "rating": 740,
+        "rating_date": "2024-01-15",
+        "sub_industry": "Software & Services",
+        "homepage": "https://www.example.com",
+        "shortname": "Example Corp",
+        "external_id": 12345,
+        "security_grade": "A",
+        "network_size_v4": 2048,
+        "network_size_v6": 0,
+        "people_count": 5000,
+        "ipv4_count": 2048,
+        "service_provider": false
+      }
+    },
+    {
+      "guid": "b850cc72-44d5-53da-a342-d9205d416ec4",
+      "name": "Acme Industries",
+      "description": "Acme Industries manufactures industrial equipment and provides supply chain management solutions.",
+      "website": "https://www.acmeindustries.com",
+      "primary_domain": "acmeindustries.com",
+      "industry": "Industrials",
+      "details": {
+        "is_service_provider": true,
+        "in_portfolio": false,
+        "has_company_tree": false,
+        "customer_monitoring_count": 3,
+        "search_history_count": 89,
+        "rating": 650,
+        "rating_date": "2024-01-14",
+        "sub_industry": "Industrial Machinery",
+        "homepage": "https://www.acmeindustries.com",
+        "shortname": "Acme",
+        "external_id": 67890,
+        "security_grade": "B",
+        "network_size_v4": 512,
+        "network_size_v6": 256,
+        "people_count": 1200,
+        "ipv4_count": 512,
+        "service_provider": true
+      }
+    }
+  ]
+}

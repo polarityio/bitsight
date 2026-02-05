@@ -1,0 +1,26 @@
+{
+  "root": {
+    "path": "",
+    "on_null": "return_empty"
+  },
+  "pipeline": [
+    {
+      "op": "copy",
+      "from": "companies[].name",
+      "to": "reduced_results.company_names"
+    },
+    {
+      "op": "copy",
+      "from": "companies[].website",
+      "to": "reduced_results.company_websites"
+    },
+    {
+      "op": "prune",
+      "strategy": "empty_values",
+      "target": "reduced_results"
+    }
+  ],
+  "output": {
+    "result": "$working.reduced_results"
+  }
+}
